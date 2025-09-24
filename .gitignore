@@ -1,0 +1,42 @@
+# Raw data dirs (inputs)
+Db-1/
+RNAseq_Sha/
+
+# Outputs
+assemblies/
+reads/
+logs/
+*.o
+*.e
+*.log
+
+# Never commit large genomics files (inputs/outputs) anywhere
+*.fastq
+*.fastq.gz
+*.fq
+*.fq.gz
+*.bam
+*.bai
+*.sam
+*.cram
+*.fa
+*.fasta
+*.fai
+*.gfa
+*.gff
+*.gff3
+*.gtf
+*.bed
+*.vcf
+*.vcf.gz
+*.vcf.gz.tbi
+
+# Editor/system
+*.swp
+*.swo
+.DS_Store
+.Rhistory
+.RData
+.Rproj.user/
+.ipynb_checkpoints/
+__pycache__/
