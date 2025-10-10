@@ -1,7 +1,7 @@
 #!/bin/bash
 
-#SBATCH --time=1-00:00:00
-#SBATCH --mem=64G
+#SBATCH --time=3-00:00:00
+#SBATCH --mem=128G
 #SBATCH --cpus-per-task=16
 #SBATCH --job-name=lja
 #SBATCH --mail-user=heritage.fatinikun@students.unibe.ch
@@ -12,8 +12,8 @@
 
 APPTAINER="/containers/apptainer/lja-0.2.sif"
 WORKDIR="/data/users/hfatinikun/assembly_annotation_course"
-READ=$WORKDIR/Db-1/*.fastq.gz
-OUTDIR=$WORKDIR/assemblies/lja
+READ="${WORKDIR}/Db-1/*.fastq.gz"
+OUTDIR="${WORKDIR}/assemblies/lja"
 mkdir -p $OUTDIR
 
 apptainer exec --bind $WORKDIR,/data/courses $APPTAINER lja -o $OUTDIR -t $SLURM_CPUS_PER_TASK --reads $READ
