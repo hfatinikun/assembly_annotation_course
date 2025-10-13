@@ -5,7 +5,7 @@
 #SBATCH --time=01:00:00
 #SBATCH --job-name=fastqc
 #SBATCH --mail-user=heritage.fatinikun@students.unibe.ch
-#SBATCH --mail-type=end
+#SBATCH --mail-type=END,FAIL
 #SBATCH --partition=pibu_el8
 #SBATCH --output=/data/users/hfatinikun/assembly_annotation_course/fastqc_%j.o
 #SBATCH --error=/data/users/hfatinikun/assembly_annotation_course/fastqc_%j.e
