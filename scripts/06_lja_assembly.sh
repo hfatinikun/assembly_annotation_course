@@ -12,7 +12,7 @@
 
 APPTAINER="/containers/apptainer/lja-0.2.sif"
 WORKDIR="/data/users/hfatinikun/assembly_annotation_course"
-READ=$WORKDIR/Db-1/*.fastq.gz
+READ="$WORKDIR/Db-1/ERR11437307.fastq.gz"
 OUTDIR=$WORKDIR/assembly/lja
 mkdir -p $OUTDIR
 

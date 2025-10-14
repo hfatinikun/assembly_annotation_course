@@ -12,8 +12,10 @@
 
 APPTAINER="/containers/apptainer/flye_2.9.5.sif"
 WORKDIR="/data/users/hfatinikun/assembly_annotation_course"
-READ=$WORKDIR/Db-1/*.fastq.gz
-OUTDIR=$WORKDIR/assembly/flye
+READ="$WORKDIR/Db-1/ERR11437307.fastq.gz"
+OUTDIR="$WORKDIR/assembly/flye"
 mkdir -p $OUTDIR
 
-apptainer exec --bind $WORKDIR,/data/courses $APPTAINER flye --pacbio-hifi $READ --genome-size 3g --threads $SLURM_CPUS_PER_TASK --out-dir $OUTDIR
+GENOME_SIZE="3g"
+
+apptainer exec --bind "$WORKDIR",/data/courses "$APPTAINER" flye --pacbio-hifi "$READ" --genome-size "$GENOME_SIZE" --threads "$SLURM_CPUS_PER_TASK" --out-dir "$OUTDIR"
