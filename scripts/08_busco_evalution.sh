@@ -5,33 +5,31 @@
 #SBATCH --cpus-per-task=16
 #SBATCH --job-name=busco
 #SBATCH --mail-user=heritage.fatinikun@students.unibe.ch
-#SBATCH --mail-type=end
+#SBATCH --mail-type=END,FAIL
 #SBATCH --partition=pibu_el8
 #SBATCH --output=/data/users/hfatinikun/assembly_annotation_course/busco_%j.o
 #SBATCH --error=/data/users/hfatinikun/assembly_annotation_course/busco_%j.e
 
-module load BUSCO/5.4.2-foss-2021a
-
+APPTAINER="/containers/apptainer/busco_6.0.0.sif"
 WORKDIR="/data/users/hfatinikun/assembly_annotation_course"
-OUTDIR="$WORKDIR/assembly_evaluation/busco/"
+INDIR="$WORKDIR/assembly"
+OUTDIR="$WORKDIR/assembly_evaluation/busco"
+LINEAGE="$WORKDIR/brassicales_odb10"
+
 mkdir -p $OUTDIR
 
-declare -A MODE=( ["flye"]="genome" ["hifiasm"]="genome" ["trinity"]="transcriptome" )
+declare -A FILES=(
+  [flye]="$INDIR/flye/assembly.fasta"
+  [hifiasm]="$INDIR/hifiasm/asm.bp.p_ctg.fa"
+  [trinity]="$INDIR/trinity.Trinity.fasta"
+)
+
+declare -A MODE=(
+  [flye]="genome"
+  [hifiasm]="genome"
+  [trinity]="transcriptome"
+)
 
 for ASM in flye hifiasm trinity; do
-    
-    INPUT="${WORKDIR}/assemblies_final/$ASM.fa"
-    RESULT="$OUTDIR/$ASM"
-    mkdir -p $RESULT
-
-    busco \
-      -i $INPUT \
-      -o "${ASM}_busco" \
-      --mode "${MODE[$ASM]}" \
-      --auto-lineage \
-      --cpu 16 \
-      --out_path $RESULT
+  apptainer exec --bind "$WORKDIR",/data/courses "$APPTAINER" busco -i "${FILES[$ASM]}" -o "${ASM}_busco" --mode "${MODE[$ASM]}" -l "$LINEAGE" --offline --cpu "$SLURM_CPUS_PER_TASK" --out_path "$OUTDIR/$ASM"  -f
 done
-
-echo "BUSCO finished. Results under $OUTDIR/*" 
-

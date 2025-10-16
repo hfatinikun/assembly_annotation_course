@@ -2,7 +2,7 @@
 
 #SBATCH --job-name=nucmer_mummer
 #SBATCH --mail-user=heritage.fatinikun@students.unibe.ch
-#SBATCH --mail-type=FAIL
+#SBATCH --mail-type=END,FAIL
 #SBATCH --cpus-per-task=8
 #SBATCH --time=12:00:00
 #SBATCH --mem=32G
@@ -14,13 +14,13 @@ APPTAINER="/containers/apptainer/mummer4_gnuplot.sif"
 WORKDIR="/data/users/hfatinikun/assembly_annotation_course"
 
 # assemblies (symlinks in assemblies_final/)
-FLYE="$WORKDIR/assemblies_final/flye.fa"
-HIFI="$WORKDIR/assemblies_final/hifiasm.fa"
+FLYE="$WORKDIR/assembly/flye/assembly.fasta"
+HIFIASM="$WORKDIR/assembly/hifiasm/asm.bp.p_ctg.fa"
 
 # reference (actual file present on the course path)
 REF="/data/courses/assembly-annotation-course/references/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa"
 
-OUTBASE="$WORKDIR/assembly_evaluation/mummer"
+OUTBASE="$WORKDIR/assembly_evaluation/nucmer_mummer"
 OUTREF="$OUTBASE/vs_ref"
 OUTPAIR="$OUTBASE/pairwise"
 
@@ -34,18 +34,12 @@ apptainer exec --bind "$WORKDIR,/data/courses" "$APPTAINER" mummerplot --png --f
 
 # ---------- Hifiasm vs reference ----------
 PREFIX="$OUTREF/hifiasm/hifiasm_vs_ref"
-apptainer exec --bind "$WORKDIR,/data/courses" "$APPTAINER" nucmer --prefix="$PREFIX" --breaklen 1000 --mincluster 1000 "$REF" "$HIFI"
+apptainer exec --bind "$WORKDIR,/data/courses" "$APPTAINER" nucmer --prefix="$PREFIX" --breaklen 1000 --mincluster 1000 "$REF" "$HIFIASM"
 
-apptainer exec --bind "$WORKDIR,/data/courses" "$APPTAINER" mummerplot --png --filter --fat --layout -R "$REF" -Q "$HIFI" -p "$PREFIX" "${PREFIX}.delta"
+apptainer exec --bind "$WORKDIR,/data/courses" "$APPTAINER" mummerplot --png --filter --fat --layout -R "$REF" -Q "$HIFIASM" -p "$PREFIX" "${PREFIX}.delta"
 
 # ---------- Pairwise: Flye vs Hifiasm ----------
 PREFIX="$OUTPAIR/flye_vs_hifiasm"
-apptainer exec --bind "$WORKDIR,/data/courses" "$APPTAINER" nucmer --prefix="$PREFIX" --breaklen 1000 --mincluster 1000 "$HIFI" "$FLYE"
+apptainer exec --bind "$WORKDIR,/data/courses" "$APPTAINER" nucmer --prefix="$PREFIX" --breaklen 1000 --mincluster 1000 "$HIFIASM" "$FLYE"
 
-apptainer exec --bind "$WORKDIR,/data/courses" "$APPTAINER" mummerplot --png --filter --fat --layout -R "$HIFI" -Q "$FLYE" -p "$PREFIX" "${PREFIX}.delta"
-
-echo "Done. Dotplots:"
-echo "  $OUTREF/flye/flye_vs_ref.png"
-echo "  $OUTREF/hifiasm/hifiasm_vs_ref.png"
-echo "  $OUTPAIR/flye_vs_hifiasm.png"
-
+apptainer exec --bind "$WORKDIR,/data/courses" "$APPTAINER" mummerplot --png --filter --fat --layout -R "$HIFIASM" -Q "$FLYE" -p "$PREFIX" "${PREFIX}.delta"
