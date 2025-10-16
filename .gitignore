@@ -6,6 +6,14 @@ RNAseq_Sha/
 assemblies/
 reads/
 logs/
+.Rlibs/
+.vscode/
+annotation/
+assembly/
+assembly_evaluation/
+brassicales_odb10/
+scripts_annotation/
+EOF
 *.o
 *.e
 *.log
