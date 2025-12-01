@@ -12,8 +12,11 @@ annotation/
 assembly/
 assembly_evaluation/
 brassicales_odb10/
+<<<<<<< Updated upstream
 scripts_annotation/
 EOF
+=======
+>>>>>>> Stashed changes
 *.o
 *.e
 *.log
@@ -38,6 +41,7 @@ EOF
 *.vcf
 *.vcf.gz
 *.vcf.gz.tbi
+*.json
 
 # Editor/system
 *.swp
